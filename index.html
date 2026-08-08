@@ -247,28 +247,25 @@
       gap: 6px;
     }
 
-    /* BINGKAI PEMUTAR VIDEO WEB (HTML5 VIDEO) */
+    /* BINGKAI PEMUTAR LAPTOP */
     .video-wrapper {
       position: relative;
       width: 100%;
+      aspect-ratio: 16 / 9;
       background-color: #000;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    /* PLAYER DARI GOOGLE APPS SCRIPT */
     .video-wrapper iframe {
       width: 100%;
-      height: min(75vh, 720px);
-      min-height: 320px;
+      height: 100%;
       border: 0;
-      border-radius: 12px;
-      background: #000;
-      display: block;
+    }
+
+    .close-mobile-btn {
+      display: none;
     }
 
     .video-details {
@@ -356,7 +353,9 @@
       background-color: #ffffff;
     }
 
-    /* MEDIA QUERIES HP */
+    /* ===================================================
+       MODE HP: PEMUTAR FULL LANDSCAPE MEMENUHI LAYAR (100vw x 100vh)
+       =================================================== */
     @media (max-width: 600px) {
       .navbar {
         padding: 12px 16px;
@@ -380,9 +379,51 @@
         height: 50px;
       }
 
-      .video-wrapper iframe {
-        height: 70vh;
-        min-height: 240px;
+      /* KETIKA BUKA PLAYER DI HP: FULL KIRI-KANAN-ATAS-BAWAH */
+      .watch-layout.active-mobile {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #000;
+        z-index: 9999;
+        display: block !important;
+        margin: 0;
+        padding: 0;
+      }
+
+      .watch-layout.active-mobile .main-player-container,
+      .watch-layout.active-mobile .video-wrapper {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        aspect-ratio: auto;
+      }
+
+      .watch-layout.active-mobile .player-header,
+      .watch-layout.active-mobile .video-details,
+      .watch-layout.active-mobile > div:nth-child(2) {
+        display: none !important; /* Sembunyikan elemen lain agar MURNI VIDEO FULL */
+      }
+
+      /* TOMBOL SILANG (X) FLOATING UNTUK KELUAR DI HP */
+      .watch-layout.active-mobile .close-mobile-btn {
+        display: flex;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        z-index: 10000;
+        cursor: pointer;
       }
     }
   </style>
@@ -409,7 +450,7 @@
     <!-- 1. HANYA LIST VIDEO DI AWAL -->
     <div id="gridView" class="grid-view"></div>
 
-    <!-- 2. PEMUTAR VIDEO WEB HTML5 ASLI -->
+    <!-- 2. PEMUTAR VIDEO STREAMING DRIVE -->
     <div id="watchLayout" class="watch-layout">
       <!-- KIRI: PLAYER BESAR -->
       <div class="main-player-container">
@@ -424,15 +465,18 @@
           </div>
         </div>
 
-        <!-- TAG VIDEO BAWAAN HP/WEB -->
         <div class="video-wrapper">
+          <!-- TOMBOL SILANG KELUAR KHUSUS HP -->
+          <button class="close-mobile-btn" onclick="showGridView()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+
           <iframe
             id="mainPlayer"
             src=""
             title="MAYPAY Video Player"
-            allow="autoplay; fullscreen"
-            allowfullscreen
-            referrerpolicy="no-referrer-when-downgrade">
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+            allowfullscreen>
           </iframe>
         </div>
         
@@ -451,13 +495,13 @@
   </div>
 
   <footer>
-    &copy; 2026 MAYPAYKOLEKSIVIDEO — Web HTML5 Player
+    &copy; 2026 MAYPAYKOLEKSIVIDEO — Google Drive Streaming
   </footer>
 
-  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 19 -->
-  <script src="videos.js?v=21"></script>
+  <!-- FILE VIDEOS.JS -->
+  <script src="videos.js?v=22"></script>
 
-  <!-- LOGIKA MENGUBAH LINK DRIVE JADI MURNI VIDEO WEB -->
+  <!-- LOGIKA APP GOOGLE DRIVE STREAMING -->
   <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
@@ -467,9 +511,6 @@
     const filterContainer = document.getElementById('filterContainer');
 
     let currentFilter = 'ALL';
-
-    // Google Apps Script Web App
-    const CODE_GS_URL = "https://script.google.com/macros/s/AKfycbz75QXaSW4aaBbTiK1itGMpDobdcxFlzU5qyDZp38ZBUqeacvCcaVA0-vJ4xq84fTLA/exec";
 
     function getCleanId(idOrUrl) {
       if (!idOrUrl) return "";
@@ -481,6 +522,7 @@
     function showGridView() {
       mainPlayer.src = "";
       watchLayout.style.display = 'none';
+      watchLayout.classList.remove('active-mobile');
       filterContainer.style.display = 'flex';
       gridView.style.display = 'grid';
     }
@@ -505,13 +547,16 @@
 
       filterContainer.style.display = 'none';
       gridView.style.display = 'none';
-      watchLayout.style.display = 'grid';
+      
+      // AKTIFKAN MODE FULLSCREEN UNTUK HP
+      if (window.innerWidth < 600) {
+        watchLayout.classList.add('active-mobile');
+      } else {
+        watchLayout.style.display = 'grid';
+      }
 
-      // Kirim ID Google Drive ke Code.gs.
-      mainPlayer.src =
-        CODE_GS_URL +
-        '?id=' +
-        encodeURIComponent(cleanId);
+      // STREAMING RESMI GOOGLE DRIVE PREVIEW
+      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview`;
 
       renderSidebar(cleanId);
       window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MAYPAYKOLEKSIVIDEO</title>
   
-  <!-- FAVICON EMOJI UNTUK MENCEGAH ERROR 404 CONSOLE -->
+  <!-- FAVICON EMOJI -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>▶️</text></svg>">
 
   <!-- Google Fonts & Font Awesome Icons -->
@@ -247,21 +247,27 @@
       gap: 6px;
     }
 
-    /* BINGKAI FRAME PEMUTAR */
+    /* BINGKAI PEMUTAR VIDEO WEB (HTML5 VIDEO) */
     .video-wrapper {
       position: relative;
       width: 100%;
-      aspect-ratio: 16 / 9;
       background-color: #000;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .video-wrapper iframe {
+    /* TAG VIDEO NATIVE WEB HP */
+    .video-wrapper video {
       width: 100%;
-      height: 100%;
-      border: 0;
+      max-height: 75vh;
+      border-radius: 12px;
+      outline: none;
+      background: #000;
+      object-fit: contain;
     }
 
     .video-details {
@@ -372,6 +378,10 @@
         width: 90px;
         height: 50px;
       }
+
+      .video-wrapper video {
+        max-height: 70vh;
+      }
     }
   </style>
 </head>
@@ -397,7 +407,7 @@
     <!-- 1. HANYA LIST VIDEO DI AWAL -->
     <div id="gridView" class="grid-view"></div>
 
-    <!-- 2. PEMUTAR VIDEO STREAMING -->
+    <!-- 2. PEMUTAR VIDEO WEB HTML5 ASLI -->
     <div id="watchLayout" class="watch-layout">
       <!-- KIRI: PLAYER BESAR -->
       <div class="main-player-container">
@@ -412,8 +422,12 @@
           </div>
         </div>
 
+        <!-- TAG VIDEO BAWAAN HP/WEB -->
         <div class="video-wrapper">
-          <iframe id="mainPlayer" src="" allow="autoplay; encrypted-media; picture-in-picture; fullscreen"></iframe>
+          <video id="mainPlayer" controls autoplay playsinline controlsList="nodownload">
+            <source id="videoSource" src="" type="video/mp4">
+            Browser Anda tidak mendukung pemutar video.
+          </video>
         </div>
         
         <div class="video-details">
@@ -431,17 +445,18 @@
   </div>
 
   <footer>
-    &copy; 2026 MAYPAYKOLEKSIVIDEO — Google Drive Streaming
+    &copy; 2026 MAYPAYKOLEKSIVIDEO — Web HTML5 Player
   </footer>
 
-  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 18 -->
-  <script src="videos.js?v=18"></script>
+  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 19 -->
+  <script src="videos.js?v=19"></script>
 
-  <!-- LOGIKA APP -->
+  <!-- LOGIKA MENGUBAH LINK DRIVE JADI MURNI VIDEO WEB -->
   <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
     const mainPlayer = document.getElementById('mainPlayer');
+    const videoSource = document.getElementById('videoSource');
     const activeTitle = document.getElementById('activeTitle');
     const sidebarList = document.getElementById('sidebarList');
     const filterContainer = document.getElementById('filterContainer');
@@ -456,7 +471,9 @@
     }
 
     function showGridView() {
+      mainPlayer.pause();
       mainPlayer.src = "";
+      videoSource.src = "";
       watchLayout.style.display = 'none';
       filterContainer.style.display = 'flex';
       gridView.style.display = 'grid';
@@ -473,8 +490,15 @@
     function playVideo(rawId, title) {
       const cleanId = getCleanId(rawId);
       
-      // MENGGUNAKAN PREVIEW STREAMING GOOGLE DRIVE RESMI
-      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview`;
+      // MENGGABUNGKAN TEKNOLOGI STREAMING DIRECT DARI DRIVE UNTUK TAG HTML5 VIDEO
+      const directVideoUrl = `https://drive.google.com/uc?export=download&id=${cleanId}`;
+      
+      videoSource.src = directVideoUrl;
+      mainPlayer.src = directVideoUrl;
+      
+      mainPlayer.load();
+      mainPlayer.play().catch(() => {});
+
       activeTitle.textContent = title;
 
       filterContainer.style.display = 'none';

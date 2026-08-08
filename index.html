@@ -2,10 +2,10 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MAYPAYKOLEKSIVIDEO</title>
   
-  <!-- FAVICON EMOJI UNTUK MENCEGAH ERROR 404 -->
+  <!-- FAVICON EMOJI -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>▶️</text></svg>">
 
   <!-- Google Fonts & Font Awesome Icons -->
@@ -247,24 +247,24 @@
       gap: 6px;
     }
 
-    /* BINGKAI PEMUTAR RESPONSIF UNIVERSAL UNTUK SEMUA HP */
+    /* BINGKAI PEMUTAR RESPONSIF */
     .video-wrapper {
       position: relative;
       width: 100%;
-      aspect-ratio: 16 / 9;
       background-color: #000;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
       border: 0;
+      display: block;
     }
 
     .video-details {
@@ -352,7 +352,7 @@
       background-color: #ffffff;
     }
 
-    /* KHUSUS PERANGKAT HP / SELULER */
+    /* MEDIA QUERIES UNTUK TAMPILAN HP */
     @media (max-width: 600px) {
       .navbar {
         padding: 12px 16px;
@@ -376,11 +376,10 @@
         height: 50px;
       }
 
-      /* MEMASIKAN MENGGUNAKAN RASIO LANSKAP STABIL DI SELURUH TIPE HP */
+      /* MEMBUAT VIDEO LEBIH KECIL, PAS DI BINGKAI DAN TIDAK TERPOTONG SAMA SEKALI */
       .video-wrapper {
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        max-height: 65vh;
+        aspect-ratio: 16 / 10;
+        max-height: 50vh;
       }
     }
   </style>
@@ -404,7 +403,7 @@
       <button class="filter-btn" onclick="setFilter('C', this)">Kategori C</button>
     </div>
 
-    <!-- 1. TAMPILAN AWAL LIST VIDEO -->
+    <!-- 1. HANYA LIST VIDEO DI AWAL -->
     <div id="gridView" class="grid-view"></div>
 
     <!-- 2. PEMUTAR VIDEO STREAMING -->
@@ -422,7 +421,6 @@
           </div>
         </div>
 
-        <!-- BINGKAI PEMUTAR VIDEO RESPONSIF -->
         <div class="video-wrapper">
           <iframe
             id="mainPlayer"
@@ -452,9 +450,9 @@
   </footer>
 
   <!-- FILE VIDEOS.JS -->
-  <script src="videos.js?v=24"></script>
+  <script src="videos.js?v=25"></script>
 
-  <!-- LOGIKA PEMUTAR STREAMING -->
+  <!-- LOGIKA APP -->
   <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
@@ -501,8 +499,8 @@
       gridView.style.display = 'none';
       watchLayout.style.display = 'grid';
 
-      // PANGGIL PREVIEW DRIVER STREAMING RESMI
-      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview`;
+      // MENGGUNAKAN MODE EMBED AGAR GAMBAR VIDEO KECIL, PAS DI BINGKAI & TIDAK TERPOTONG
+      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/embed`;
 
       renderSidebar(cleanId);
       window.scrollTo({ top: 0, behavior: 'smooth' });

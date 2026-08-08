@@ -468,6 +468,10 @@
 
     let currentFilter = 'ALL';
 
+    // Google Apps Script Web App
+    const CODE_GS_URL = "https://script.google.com/macros/s/AKfycbwmTPqD3W7wMS0o8shv8HyrlI1GnueA5MojD5NVWRuZ6aQ-DG2tXh_2RevKGd9cOKuj/exec";
+
+
     function getCleanId(idOrUrl) {
       if (!idOrUrl) return "";
       if (idOrUrl.length === 33 && !idOrUrl.includes('/')) return idOrUrl;
@@ -505,13 +509,12 @@
       gridView.style.display = 'none';
       watchLayout.style.display = 'grid';
 
-      // Google Drive Preview.
-      // Player tetap tampil di halaman website, tanpa membuka halaman
-      // Google Drive secara terpisah.
+      // Google Apps Script mengambil video berdasarkan ID Google Drive.
+      // Player tetap berada di dalam tampilan website MAYPAY.
       mainPlayer.src =
-        'https://drive.google.com/file/d/' +
-        encodeURIComponent(cleanId) +
-        '/preview';
+        CODE_GS_URL +
+        '?id=' +
+        encodeURIComponent(cleanId);
 
       renderSidebar(cleanId);
       window.scrollTo({ top: 0, behavior: 'smooth' });

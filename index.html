@@ -226,10 +226,10 @@
       text-decoration: underline;
     }
 
-    /* WADAH PEMUTAR VIDEO STANDAR 16:9 */
+    /* WADAH PEMUTAR VIDEO LAPTOP */
     .video-wrapper {
       position: relative;
-      padding-bottom: 56.25%; /* Rasio standar agar kontrol di paling bawah */
+      padding-bottom: 56.25%; /* 16:9 Landscape Laptop */
       height: 0;
       background-color: #000;
       border-radius: 12px;
@@ -354,7 +354,7 @@
     }
 
     /* ===================================================
-       RESPONSIF HP (TETAP 16:9 AGAR KONTROL DRIVER DI PALING BAWAH)
+       RESPONSIF KHUSUS HP (TAMPILAN PROPORSIOANL VERTIKAL)
        =================================================== */
     @media (max-width: 600px) {
       .navbar {
@@ -374,16 +374,18 @@
         gap: 10px;
       }
 
+      /* TINGGI TAMPILAN HP DIPAS-KAN DENGAN RASIO VIDEO PORTRAIT HP (4:5 / 3:4) */
       .video-wrapper {
-        padding-bottom: 56.25%; /* Rasio 16:9 di HP agar kontrol selalu rapi di bawah */
+        padding-bottom: 100%; /* Membuat tinggi pemutar pas dengan video vertikal tanpa memotong garis durasi */
       }
 
+      /* BADGE MAYPAY DI HP DIBIKIN TIPIS/KECIL SUPAYA TIDAK MENUTUPI/MERUSAK CONTROL */
       .drive-blocker-logo {
-        min-width: 80px;
-        height: 32px;
-        padding: 4px 8px;
-        font-size: 10px;
-        border-bottom-left-radius: 8px;
+        min-width: 75px;
+        height: 28px;
+        padding: 2px 6px;
+        font-size: 9px;
+        border-bottom-left-radius: 6px;
       }
 
       .sidebar-thumb {
@@ -449,7 +451,7 @@
   </footer>
 
   <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION -->
-  <script src="videos.js?v=4"></script>
+  <script src="videos.js?v=5"></script>
 
   <!-- LOGIKA APP -->
   <script>

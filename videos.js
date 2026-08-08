@@ -25,5 +25,9 @@ const videoList = [
     {
       id: "https://drive.google.com/file/d/1_gaVfcl_8HPTnffG0P-yfqFl3XmZO6sv/view?usp=sharing",
       title: "Sideo Koleksi 5"
-    }
+    },
+    {
+        id: "https://drive.google.com/file/d/1tjul2WSXIBAHQObOHx64OfoSQoVgDTY1/view?usp=sharing",
+        title: "Sideo evan"
+      }
   ];

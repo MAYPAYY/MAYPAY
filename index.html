@@ -68,6 +68,33 @@
       flex-grow: 1;
     }
 
+    /* KATEGORI / FILTER BUTTONS */
+    .filter-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 18px;
+      background-color: #ffffff;
+      border: 1px solid #bae6fd;
+      color: #0369a1;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background-color: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
+    }
+
     /* 1. TAMPILAN AWAL (GRID VIDEO) */
     .grid-view {
       display: grid;
@@ -218,20 +245,23 @@
       border: 0;
     }
 
-  /* LOGO PENUTUP IKON DRIVE (UKURAN LEBIH LEBAR DAN LEBIH PANJANG KE BAWAH) */
-  .drive-blocker-logo {
+    /* LOGO BADGE UKURAN BESAR UNTUK MENUTUPI IKON DRIVE */
+    .drive-blocker-logo {
       position: absolute;
       top: 0;
       right: 0;
-      padding: 24px 30px; /* 24px ke atas-bawah, 30px ke kiri-kanan */
-      background-color: #0284c7; /* Warna Biru Solid */
+      min-width: 140px;
+      min-height: 65px;
+      padding: 12px 20px;
+      background-color: #0284c7;
       color: #ffffff;
-      border-bottom-left-radius: 16px; /* Sudut membulat lebih pas */
+      border-bottom-left-radius: 16px;
       font-size: 15px;
       font-weight: 800;
       letter-spacing: 0.5px;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       z-index: 10;
       box-shadow: -2px 2px 10px rgba(0,0,0,0.3);
@@ -249,7 +279,7 @@
       color: #0f172a;
     }
 
-    /* KANAN: LIST VIDEO SIDEBAR */
+    /* KANAN: LIST REKOMENDASI SIDEBAR */
     .sidebar-list {
       display: flex;
       flex-direction: column;
@@ -337,6 +367,13 @@
 
   <div class="container">
 
+    <!-- TOMBOL FILTER KATEGORI -->
+    <div class="filter-container" id="filterContainer">
+      <button class="filter-btn active" onclick="setFilter('ALL', this)">Semua Video</button>
+      <button class="filter-btn" onclick="setFilter('S', this)">Kategori S</button>
+      <button class="filter-btn" onclick="setFilter('C', this)">Kategori C</button>
+    </div>
+
     <!-- 1. HANYA LIST VIDEO DI AWAL -->
     <div id="gridView" class="grid-view"></div>
 
@@ -348,7 +385,7 @@
           <i class="fa-solid fa-arrow-left"></i> Kembali ke Galeri
         </button>
         <div class="video-wrapper">
-          <!-- LOGO BADGE PENUTUP IKON DRIVE -->
+          <!-- LOGO BADGE PENUTUP UKURAN BESAR -->
           <div class="drive-blocker-logo">
             <i class="fa-solid fa-play"></i> MAYPAY
           </div>
@@ -360,7 +397,7 @@
         </div>
       </div>
 
-      <!-- KANAN: LIST REKOMENDASI -->
+      <!-- KANAN: LIST LAINNYA -->
       <div>
         <div class="sidebar-title">Koleksi Lainnya</div>
         <div class="sidebar-list" id="sidebarList"></div>
@@ -383,6 +420,9 @@
     const mainPlayer = document.getElementById('mainPlayer');
     const activeTitle = document.getElementById('activeTitle');
     const sidebarList = document.getElementById('sidebarList');
+    const filterContainer = document.getElementById('filterContainer');
+
+    let currentFilter = 'ALL';
 
     function getCleanId(idOrUrl) {
       if (!idOrUrl) return "";
@@ -394,7 +434,16 @@
     function showGridView() {
       mainPlayer.src = "";
       watchLayout.style.display = 'none';
+      filterContainer.style.display = 'flex';
       gridView.style.display = 'grid';
+    }
+
+    function setFilter(prefix, btnElement) {
+      currentFilter = prefix;
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+      renderGrid();
     }
 
     function playVideo(rawId, title) {
@@ -402,6 +451,7 @@
       mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview`;
       activeTitle.textContent = title;
 
+      filterContainer.style.display = 'none';
       gridView.style.display = 'none';
       watchLayout.style.display = 'grid';
 
@@ -416,7 +466,19 @@
         return;
       }
 
-      videoList.forEach(video => {
+      // Filter berdasarkan huruf awal judul
+      const filteredList = videoList.filter(video => {
+        if (currentFilter === 'ALL') return true;
+        const firstLetter = video.title.trim().charAt(0).toUpperCase();
+        return firstLetter === currentFilter;
+      });
+
+      if (filteredList.length === 0) {
+        gridView.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Tidak ada video dengan awalan judul ' + currentFilter + '</p>';
+        return;
+      }
+
+      filteredList.forEach(video => {
         const cleanId = getCleanId(video.id);
         const thumbUrl = `https://drive.google.com/thumbnail?id=${cleanId}&sz=w800`;
         const card = document.createElement('div');

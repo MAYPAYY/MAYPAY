@@ -218,23 +218,22 @@
       border: 0;
     }
 
-    /* LOGO PENUTUP IKON DRIVE (SOLID BADGE) */
     .drive-blocker-logo {
       position: absolute;
-      top: 8px;
-      right: 8px;
+      top: 0;
+      right: 0;
+      padding: 14px 22px; /* Diperbesar tinggi dan lebarnya */
       background-color: #0284c7; /* Warna Biru Solid */
       color: #ffffff;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
+      border-bottom-left-radius: 12px; /* Sudut kiri bawah dibikin membulat rapi */
+      font-size: 14px;
+      font-weight: 800;
       letter-spacing: 0.5px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       z-index: 10;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      box-shadow: -2px 2px 10px rgba(0,0,0,0.3);
       user-select: none;
       pointer-events: auto;
     }

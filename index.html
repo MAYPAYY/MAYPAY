@@ -99,7 +99,7 @@
       box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
     }
 
-    /* 1. TAMPILAN AWAL (GRID VIDEO RESPONSIF) */
+    /* GRID VIDEO */
     .grid-view {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -194,152 +194,100 @@
       gap: 6px;
     }
 
-    /* 2. TAMPILAN PEMUTAR VIDEO */
-    .watch-layout {
+    /* ===================================================
+       MODAL PEMUTAR SEPERTI GOOGLE DRIVE ASLI
+       =================================================== */
+    .drive-modal {
       display: none;
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-
-    @media (min-width: 992px) {
-      .watch-layout {
-        grid-template-columns: 1fr 360px;
-      }
-    }
-
-    .main-player-container {
-      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
     }
 
-    .player-header {
+    .drive-modal.active {
+      display: flex;
+    }
+
+    /* HEADER MODAL */
+    .modal-header {
+      width: 100%;
+      max-width: 900px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      color: #ffffff;
       margin-bottom: 12px;
+      padding: 0 4px;
     }
 
-    .back-btn {
-      background: none;
-      border: none;
-      color: #0284c7;
+    .modal-title {
+      font-size: 16px;
       font-weight: 600;
-      font-size: 14px;
+      color: #f1f5f9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 70%;
+    }
+
+    .modal-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #ffffff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      transition: background 0.2s;
     }
 
-    .back-btn:hover {
-      text-decoration: underline;
+    .modal-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
     }
 
-    .maypay-badge {
-      background-color: #0284c7;
-      color: #ffffff;
-      padding: 4px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    .close-btn {
+      background: #ef4444;
     }
 
-    /* BINGKAI PEMUTAR RESPONSIF */
-    .video-wrapper {
-      position: relative;
+    .close-btn:hover {
+      background: #dc2626;
+    }
+
+    /* BINGKAI IFRAME DRIVE MODAL */
+    .modal-player-box {
       width: 100%;
+      max-width: 900px;
       aspect-ratio: 16 / 9;
-      background-color: #000;
+      background: #000000;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      position: relative;
     }
 
-    .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
+    .modal-player-box iframe {
       width: 100%;
       height: 100%;
       border: 0;
-    }
-
-    .video-details {
-      margin-top: 16px;
-    }
-
-    .video-details h1 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #0f172a;
-    }
-
-    /* SIDEBAR REKOMENDASI */
-    .sidebar-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .sidebar-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #0369a1;
-      margin-bottom: 6px;
-    }
-
-    .sidebar-card {
-      display: flex;
-      gap: 10px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      padding: 8px;
-      border: 1px solid #e2e8f0;
-      cursor: pointer;
-      transition: border-color 0.2s, background-color 0.2s;
-    }
-
-    .sidebar-card:hover {
-      border-color: #38bdf8;
-      background-color: #f0f9ff;
-    }
-
-    .sidebar-thumb {
-      width: 110px;
-      height: 62px;
-      border-radius: 6px;
-      overflow: hidden;
-      position: relative;
-      flex-shrink: 0;
-      background-color: #cbd5e1;
-    }
-
-    .sidebar-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .sidebar-info {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .sidebar-info-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #0f172a;
-      line-height: 1.3;
-    }
-
-    .sidebar-info-meta {
-      font-size: 11px;
-      color: #64748b;
-      margin-top: 4px;
     }
 
     footer {
@@ -352,14 +300,10 @@
       background-color: #ffffff;
     }
 
-    /* MEDIA QUERIES UNTUK TAMPILAN HP */
+    /* RESPONSIVE HP */
     @media (max-width: 600px) {
       .navbar {
         padding: 12px 16px;
-      }
-
-      .navbar-title {
-        font-size: 16px;
       }
 
       .container {
@@ -371,13 +315,17 @@
         gap: 10px;
       }
 
-      .sidebar-thumb {
-        width: 90px;
-        height: 50px;
+      .drive-modal {
+        padding: 8px;
       }
 
-      .video-wrapper {
+      .modal-title {
+        font-size: 14px;
+      }
+
+      .modal-player-box {
         aspect-ratio: 16 / 9;
+        max-height: 70vh;
       }
     }
   </style>
@@ -386,7 +334,7 @@
 
   <!-- NAVBAR BIRU MUDA -->
   <header class="navbar">
-    <a onclick="showGridView()" class="navbar-brand">
+    <a onclick="closeVideoModal()" class="navbar-brand">
       <i class="fa-solid fa-circle-play"></i>
       <span class="navbar-title">MAYPAYKOLEKSIVIDEO</span>
     </a>
@@ -401,46 +349,35 @@
       <button class="filter-btn" onclick="setFilter('C', this)">Kategori C</button>
     </div>
 
-    <!-- 1. HANYA LIST VIDEO DI AWAL -->
+    <!-- TAMPILAN GRID VIDEO -->
     <div id="gridView" class="grid-view"></div>
 
-    <!-- 2. PEMUTAR VIDEO STREAMING -->
-    <div id="watchLayout" class="watch-layout">
-      <!-- KIRI: PLAYER BESAR -->
-      <div class="main-player-container">
-        
-        <!-- HEADER ATAS PLAYER -->
-        <div class="player-header">
-          <button class="back-btn" onclick="showGridView()">
-            <i class="fa-solid fa-arrow-left"></i> Kembali ke Galeri
-          </button>
-          <div class="maypay-badge">
-            <i class="fa-solid fa-play"></i> MAYPAY
-          </div>
-        </div>
+  </div>
 
-        <div class="video-wrapper">
-          <!-- DIHAPUS ATRIBUT allowfullscreen AGAR TIDAK WARN DI CONSOLE -->
-          <iframe
-            id="mainPlayer"
-            src=""
-            title="MAYPAY Video Player"
-            allow="autoplay; encrypted-media; picture-in-picture; fullscreen">
-          </iframe>
-        </div>
-        
-        <div class="video-details">
-          <h1 id="activeTitle">Judul Video</h1>
-        </div>
-      </div>
-
-      <!-- KANAN: LIST REKOMENDASI SIDEBAR -->
-      <div>
-        <div class="sidebar-title">Koleksi Lainnya</div>
-        <div class="sidebar-list" id="sidebarList"></div>
+  <!-- MODAL PEMUTAR VIDEO SEPERTI GOOGLE DRIVE ASLI -->
+  <div id="driveModal" class="drive-modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Judul Video</div>
+      <div class="modal-actions">
+        <!-- TOMBOL FULLSCREEN SIKU -->
+        <button class="modal-btn" onclick="toggleFullScreen()">
+          <i class="fa-solid fa-expand"></i> Layar Penuh
+        </button>
+        <!-- TOMBOL TUTUP -->
+        <button class="modal-btn close-btn" onclick="closeVideoModal()">
+          <i class="fa-solid fa-xmark"></i> Tutup
+        </button>
       </div>
     </div>
 
+    <div class="modal-player-box" id="modalPlayerBox">
+      <iframe
+        id="modalPlayer"
+        src=""
+        title="MAYPAY Video Player"
+        allow="autoplay; encrypted-media; picture-in-picture; fullscreen">
+      </iframe>
+    </div>
   </div>
 
   <footer>
@@ -448,16 +385,15 @@
   </footer>
 
   <!-- FILE VIDEOS.JS -->
-  <script src="videos.js?v=26"></script>
+  <script src="videos.js?v=27"></script>
 
-  <!-- LOGIKA APP -->
+  <!-- LOGIKA MODAL GOOGLE DRIVE + FULLSCREEN API -->
   <script>
     const gridView = document.getElementById('gridView');
-    const watchLayout = document.getElementById('watchLayout');
-    const mainPlayer = document.getElementById('mainPlayer');
-    const activeTitle = document.getElementById('activeTitle');
-    const sidebarList = document.getElementById('sidebarList');
-    const filterContainer = document.getElementById('filterContainer');
+    const driveModal = document.getElementById('driveModal');
+    const modalPlayer = document.getElementById('modalPlayer');
+    const modalPlayerBox = document.getElementById('modalPlayerBox');
+    const modalTitle = document.getElementById('modalTitle');
 
     let currentFilter = 'ALL';
 
@@ -468,13 +404,6 @@
       return match ? match[1] : idOrUrl;
     }
 
-    function showGridView() {
-      mainPlayer.src = "";
-      watchLayout.style.display = 'none';
-      filterContainer.style.display = 'flex';
-      gridView.style.display = 'grid';
-    }
-
     function setFilter(prefix, btnElement) {
       currentFilter = prefix;
       const buttons = document.querySelectorAll('.filter-btn');
@@ -483,7 +412,7 @@
       renderGrid();
     }
 
-    function playVideo(rawId, title) {
+    function openVideoModal(rawId, title) {
       const cleanId = getCleanId(rawId);
 
       if (!cleanId) {
@@ -491,17 +420,37 @@
         return;
       }
 
-      activeTitle.textContent = title;
+      modalTitle.textContent = title;
+      // Gunakan preview Drive resmi
+      modalPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview`;
+      driveModal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Kunci scroll halaman
+    }
 
-      filterContainer.style.display = 'none';
-      gridView.style.display = 'none';
-      watchLayout.style.display = 'grid';
+    function closeVideoModal() {
+      modalPlayer.src = "";
+      driveModal.classList.remove('active');
+      document.body.style.overflow = 'auto'; // Buka scroll halaman
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+    }
 
-      // DIGANTI KEMBALI KE /preview AGAR TIDAK ERROR 404
-      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview`;
-
-      renderSidebar(cleanId);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    // FUNGSI AKTIFKAN FULLSCREEN APAPUN PERANGKATNYA
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        if (modalPlayerBox.requestFullscreen) {
+          modalPlayerBox.requestFullscreen();
+        } else if (modalPlayerBox.webkitRequestFullscreen) { /* Safari / iOS */
+          modalPlayerBox.webkitRequestFullscreen();
+        } else if (modalPlayerBox.msRequestFullscreen) {
+          modalPlayerBox.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
     }
 
     function renderGrid() {
@@ -527,7 +476,7 @@
         const thumbUrl = `https://drive.google.com/thumbnail?id=${cleanId}&sz=w800`;
         const card = document.createElement('div');
         card.className = 'video-card';
-        card.onclick = () => playVideo(cleanId, video.title);
+        card.onclick = () => openVideoModal(cleanId, video.title);
 
         card.innerHTML = `
           <div class="thumbnail-container">
@@ -544,30 +493,6 @@
           </div>
         `;
         gridView.appendChild(card);
-      });
-    }
-
-    function renderSidebar(currentId) {
-      sidebarList.innerHTML = '';
-      videoList.forEach(video => {
-        const cleanId = getCleanId(video.id);
-        if (cleanId === currentId) return;
-
-        const thumbUrl = `https://drive.google.com/thumbnail?id=${cleanId}&sz=w400`;
-        const card = document.createElement('div');
-        card.className = 'sidebar-card';
-        card.onclick = () => playVideo(cleanId, video.title);
-
-        card.innerHTML = `
-          <div class="sidebar-thumb">
-            <img src="${thumbUrl}" alt="${video.title}" onerror="this.src='https://placehold.co/400x225/e2e8f0/0284c7?text=VIDEO'">
-          </div>
-          <div class="sidebar-info">
-            <div class="sidebar-info-title">${video.title}</div>
-            <div class="sidebar-info-meta"><i class="fa-solid fa-play"></i> Tonton</div>
-          </div>
-        `;
-        sidebarList.appendChild(card);
       });
     }
 

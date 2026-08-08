@@ -260,7 +260,7 @@
       justify-content: center;
     }
 
-    /* PLAYER GOOGLE DRIVE DI DALAM TAMPILAN WEBSITE */
+    /* PLAYER DARI GOOGLE APPS SCRIPT */
     .video-wrapper iframe {
       width: 100%;
       height: min(75vh, 720px);
@@ -424,7 +424,7 @@
           </div>
         </div>
 
-        <!-- PLAYER GOOGLE DRIVE DI DALAM WEBSITE -->
+        <!-- TAG VIDEO BAWAAN HP/WEB -->
         <div class="video-wrapper">
           <iframe
             id="mainPlayer"
@@ -454,10 +454,10 @@
     &copy; 2026 MAYPAYKOLEKSIVIDEO — Web HTML5 Player
   </footer>
 
-  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 20 -->
-  <script src="videos.js?v=20"></script>
+  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 19 -->
+  <script src="videos.js?v=21"></script>
 
-  <!-- LOGIKA PEMUTAR GOOGLE DRIVE -->
+  <!-- LOGIKA MENGUBAH LINK DRIVE JADI MURNI VIDEO WEB -->
   <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
@@ -469,8 +469,7 @@
     let currentFilter = 'ALL';
 
     // Google Apps Script Web App
-    const CODE_GS_URL = "https://script.google.com/macros/s/AKfycbx93MeCzpI9n23nC4Sb6qjJ4-eAFjmhabaLA7jG9FaWWiTGSNr-h_t2ww9kHG9rw38l/exec";
-
+    const CODE_GS_URL = "https://script.google.com/macros/s/AKfycbz75QXaSW4aaBbTiK1itGMpDobdcxFlzU5qyDZp38ZBUqeacvCcaVA0-vJ4xq84fTLA/exec";
 
     function getCleanId(idOrUrl) {
       if (!idOrUrl) return "";
@@ -494,14 +493,13 @@
       renderGrid();
     }
 
-    // ==========================================================
-    // PEMUTAR GOOGLE DRIVE - TANPA SERVER / APPS SCRIPT
-    // Menggunakan Google Drive Preview di dalam iframe.
-    // Video tetap berada di Google Drive.
-    // ==========================================================
-
     function playVideo(rawId, title) {
       const cleanId = getCleanId(rawId);
+
+      if (!cleanId) {
+        alert('ID video Google Drive tidak ditemukan.');
+        return;
+      }
 
       activeTitle.textContent = title;
 
@@ -509,8 +507,7 @@
       gridView.style.display = 'none';
       watchLayout.style.display = 'grid';
 
-      // Google Apps Script mengambil video berdasarkan ID Google Drive.
-      // Player tetap berada di dalam tampilan website MAYPAY.
+      // Kirim ID Google Drive ke Code.gs.
       mainPlayer.src =
         CODE_GS_URL +
         '?id=' +

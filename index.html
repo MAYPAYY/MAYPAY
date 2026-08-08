@@ -219,6 +219,18 @@
       border: 0;
     }
 
+    /* BLOKER UNTUK MENUTUPI IKON DRIVE DI POJOK KANAN ATAS */
+    .drive-blocker {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 70px;
+      height: 70px;
+      background: transparent;
+      z-index: 10;
+      cursor: default;
+    }
+
     .video-details {
       margin-top: 16px;
     }
@@ -330,6 +342,9 @@
           <i class="fa-solid fa-arrow-left"></i> Kembali ke Galeri
         </button>
         <div class="video-wrapper">
+          <!-- Pelindung Ikon Google Drive -->
+          <div class="drive-blocker"></div>
+          
           <iframe id="mainPlayer" src="" allow="autoplay" allowfullscreen></iframe>
         </div>
         <div class="video-details">

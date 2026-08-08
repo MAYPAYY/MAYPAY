@@ -251,20 +251,20 @@
     .video-wrapper {
       position: relative;
       width: 100%;
+      aspect-ratio: 16 / 9;
       background-color: #000;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       border: 0;
-      display: block;
     }
 
     .video-details {
@@ -376,10 +376,8 @@
         height: 50px;
       }
 
-      /* MEMBUAT VIDEO LEBIH KECIL, PAS DI BINGKAI DAN TIDAK TERPOTONG SAMA SEKALI */
       .video-wrapper {
-        aspect-ratio: 16 / 10;
-        max-height: 50vh;
+        aspect-ratio: 16 / 9;
       }
     }
   </style>
@@ -422,12 +420,12 @@
         </div>
 
         <div class="video-wrapper">
+          <!-- DIHAPUS ATRIBUT allowfullscreen AGAR TIDAK WARN DI CONSOLE -->
           <iframe
             id="mainPlayer"
             src=""
             title="MAYPAY Video Player"
-            allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-            allowfullscreen>
+            allow="autoplay; encrypted-media; picture-in-picture; fullscreen">
           </iframe>
         </div>
         
@@ -450,7 +448,7 @@
   </footer>
 
   <!-- FILE VIDEOS.JS -->
-  <script src="videos.js?v=25"></script>
+  <script src="videos.js?v=26"></script>
 
   <!-- LOGIKA APP -->
   <script>
@@ -499,8 +497,8 @@
       gridView.style.display = 'none';
       watchLayout.style.display = 'grid';
 
-      // MENGGUNAKAN MODE EMBED AGAR GAMBAR VIDEO KECIL, PAS DI BINGKAI & TIDAK TERPOTONG
-      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/embed`;
+      // DIGANTI KEMBALI KE /preview AGAR TIDAK ERROR 404
+      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview`;
 
       renderSidebar(cleanId);
       window.scrollTo({ top: 0, behavior: 'smooth' });

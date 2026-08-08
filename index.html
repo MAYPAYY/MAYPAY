@@ -235,7 +235,6 @@
       text-decoration: underline;
     }
 
-    /* BADGE MAYPAY */
     .maypay-badge {
       background-color: #0284c7;
       color: #ffffff;
@@ -248,7 +247,7 @@
       gap: 6px;
     }
 
-    /* BINGKAI FRAME PEMUTAR PORTRAIT FULL KE BAWAH */
+    /* BINGKAI PEMUTAR VIDEO WEB HTML5 */
     .video-wrapper {
       position: relative;
       width: 100%;
@@ -261,36 +260,13 @@
       justify-content: center;
     }
 
-    .player-loader {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: #38bdf8;
-      font-size: 13px;
-      font-weight: 600;
-      z-index: 1;
-    }
-
-    .player-loader i {
-      font-size: 28px;
-    }
-
-    /* IFRAME POSISI PRESISI SUPAYA KONTROL DRIVE TURUN KE BAWAH */
-    .video-wrapper iframe {
-      position: relative;
-      z-index: 2;
+    /* PEMUTAR VIDEO WEB ASLI */
+    .video-wrapper video {
       width: 100%;
-      height: 100%;
-      border: 0;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .video-wrapper iframe.loaded {
-      opacity: 1;
+      max-height: 75vh;
+      border-radius: 12px;
+      outline: none;
+      object-fit: contain;
     }
 
     .video-details {
@@ -402,10 +378,8 @@
         height: 50px;
       }
 
-      /* TUNGGAL & MENURUNKAN KONTROL MEDIA LEBIH RENDAH DI HP */
-      .video-wrapper iframe {
-        margin-top: 5%;
-        height: 95%;
+      .video-wrapper video {
+        max-height: 65vh;
       }
     }
   </style>
@@ -432,7 +406,7 @@
     <!-- 1. HANYA LIST VIDEO DI AWAL -->
     <div id="gridView" class="grid-view"></div>
 
-    <!-- 2. PEMUTAR VIDEO -->
+    <!-- 2. PEMUTAR VIDEO WEB HTML5 -->
     <div id="watchLayout" class="watch-layout">
       <!-- KIRI: PLAYER BESAR -->
       <div class="main-player-container">
@@ -447,12 +421,12 @@
           </div>
         </div>
 
-        <div class="video-wrapper" id="videoWrapper">
-          <div class="player-loader" id="playerLoader">
-            <i class="fa-solid fa-circle-notch fa-spin"></i>
-            <span>Memuat Video...</span>
-          </div>
-          <iframe id="mainPlayer" src="" allow="autoplay; encrypted-media; picture-in-picture; fullscreen"></iframe>
+        <!-- MENGGUNAKAN ELEMENT VIDEO WEB HTML5 BAWAAN BROWSER -->
+        <div class="video-wrapper">
+          <video id="mainPlayer" controls autoplay playsinline controlsList="nodownload">
+            <source id="videoSource" src="" type="video/mp4">
+            Browser Anda tidak mendukung pemutar video web.
+          </video>
         </div>
         
         <div class="video-details">
@@ -473,43 +447,20 @@
     &copy; 2026 MAYPAYKOLEKSIVIDEO — Google Drive Streaming
   </footer>
 
-  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 16 -->
-  <script src="videos.js?v=16"></script>
+  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 17 -->
+  <script src="videos.js?v=17"></script>
 
-  <!-- LOGIKA APP: FRAME FULL KE BAWAH PORTRAIT 9:16 KONTROL TURUN -->
+  <!-- LOGIKA APP HTML5 VIDEO PLAYER -->
   <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
     const mainPlayer = document.getElementById('mainPlayer');
+    const videoSource = document.getElementById('videoSource');
     const activeTitle = document.getElementById('activeTitle');
     const sidebarList = document.getElementById('sidebarList');
     const filterContainer = document.getElementById('filterContainer');
-    const videoWrapper = document.getElementById('videoWrapper');
-    const playerLoader = document.getElementById('playerLoader');
 
     let currentFilter = 'ALL';
-
-    // MEMBUAT FRAME DI HP TINGGI FULL KE BAWAH (PORTRAIT 9:16)
-    function adjustPlayerSize() {
-      const screenWidth = window.innerWidth;
-
-      if (screenWidth < 600) {
-        // FRAME DI-SET FULL TINGGI PORTRAIT
-        const fullPortraitHeight = Math.floor(screenWidth * (16 / 9));
-        videoWrapper.style.height = `${fullPortraitHeight}px`;
-      } else {
-        // DI LAPTOP: Rasio standar 16:9
-        const wrapperWidth = videoWrapper.clientWidth || (screenWidth > 992 ? screenWidth - 400 : screenWidth - 40);
-        videoWrapper.style.height = `${Math.floor(wrapperWidth * 0.5625)}px`;
-      }
-    }
-
-    window.addEventListener('resize', adjustPlayerSize);
-
-    mainPlayer.addEventListener('load', () => {
-      mainPlayer.classList.add('loaded');
-      playerLoader.style.display = 'none';
-    });
 
     function getCleanId(idOrUrl) {
       if (!idOrUrl) return "";
@@ -519,8 +470,9 @@
     }
 
     function showGridView() {
+      mainPlayer.pause();
       mainPlayer.src = "";
-      mainPlayer.classList.remove('loaded');
+      videoSource.src = "";
       watchLayout.style.display = 'none';
       filterContainer.style.display = 'flex';
       gridView.style.display = 'grid';
@@ -537,18 +489,19 @@
     function playVideo(rawId, title) {
       const cleanId = getCleanId(rawId);
       
-      mainPlayer.classList.remove('loaded');
-      playerLoader.style.display = 'flex';
+      // LINK DIRECT STREAMING GOOGLE DRIVE
+      const streamUrl = `https://drive.google.com/uc?export=download&id=${cleanId}`;
+      
+      videoSource.src = streamUrl;
+      mainPlayer.src = streamUrl;
+      mainPlayer.load();
+      mainPlayer.play().catch(() => {});
+
+      activeTitle.textContent = title;
 
       filterContainer.style.display = 'none';
       gridView.style.display = 'none';
       watchLayout.style.display = 'grid';
-
-      // UKUR FRAME PORTRAIT FULL
-      adjustPlayerSize();
-
-      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview?autoplay=1`;
-      activeTitle.textContent = title;
 
       renderSidebar(cleanId);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -621,10 +574,7 @@
       });
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      renderGrid();
-      adjustPlayerSize();
-    });
+    document.addEventListener('DOMContentLoaded', renderGrid);
   </script>
 </body>
 </html>

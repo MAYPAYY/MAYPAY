@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MAYPAYKOLEKSIVIDEO</title>
+  
+  <!-- FAVICON EMOJI UNTUK MENCEGAH ERROR 404 CONSOLE -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>▶️</text></svg>">
+
   <!-- Google Fonts & Font Awesome Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -431,10 +435,10 @@
     &copy; 2026 MAYPAYKOLEKSIVIDEO — Google Drive Streaming
   </footer>
 
-  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 11 -->
-  <script src="videos.js?v=11"></script>
+  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 12 -->
+  <script src="videos.js?v=12"></script>
 
-  <!-- LOGIKA APP DENGAN PERHITUNGAN UKURAN DINAMIS -->
+  <!-- LOGIKA APP DENGAN PERHITUNGAN UKURAN DINAMIS & AUTOPLAY -->
   <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
@@ -489,7 +493,8 @@
 
     function playVideo(rawId, title) {
       const cleanId = getCleanId(rawId);
-      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview`;
+      // MENAMBAHKAN PARAMETER autoplay=1 AGAR BEGITU DIKLIK VIDEO LANGSUNG DIPUTAR
+      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview?autoplay=1`;
       activeTitle.textContent = title;
 
       filterContainer.style.display = 'none';

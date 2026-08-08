@@ -1,11 +1,9 @@
 // ==========================================
 // DAFTAR KOLEKSI VIDEO GOOGLE DRIVE
 // ==========================================
-// Jika ingin menambah video baru, tinggal salin salah satu format di bawah:
-// {
-//   id: "LINK_ATAU_ID_GOOGLE_DRIVE",
-//   title: "JUDUL_VIDEO_ANDA"
-// },
+// Catatan Kategori:
+// - Judul diawali huruf 'S' akan masuk Kategori S
+// - Judul diawali huruf 'C' akan masuk Kategori C
 
 const videoList = [
     {

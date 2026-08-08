@@ -248,7 +248,7 @@
       gap: 6px;
     }
 
-    /* BINGKAI FRAME PEMUTAR DENGAN ANIMASI LOADING SILENT */
+    /* BINGKAI FRAME PEMUTAR */
     .video-wrapper {
       position: relative;
       width: 100%;
@@ -466,10 +466,10 @@
     &copy; 2026 MAYPAYKOLEKSIVIDEO — Google Drive Streaming
   </footer>
 
-  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 13 -->
-  <script src="videos.js?v=13"></script>
+  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 14 -->
+  <script src="videos.js?v=14"></script>
 
-  <!-- LOGIKA APP DENGAN INSTANT SIZING & LOADING ANIMATION -->
+  <!-- LOGIKA APP DENGAN FULL TINGGI PORTRAIT HP (9:16) -->
   <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
@@ -482,26 +482,23 @@
 
     let currentFilter = 'ALL';
 
-    // FUNGSI MENGHITUNG UKURAN LAYAR INSTAN
+    // FUNGSI MENGHITUNG UKURAN FRAME HP FULL KE BAWAH (PORTRAIT 9:16)
     function adjustPlayerSize() {
       const screenWidth = window.innerWidth;
-      const screenHeight = window.innerHeight;
 
       if (screenWidth < 600) {
-        // DI HP: Tinggi dinamis langsung diukur sebelum video tampil
-        const dynamicHeight = Math.min(screenWidth * 0.75, screenHeight * 0.45);
-        videoWrapper.style.height = `${dynamicHeight}px`;
+        // DI HP: Frame dibuat tinggi full (rasio portrait 9:16) agar video tidak terpotong & tidak gelap
+        const fullPortraitHeight = Math.floor(screenWidth * (16 / 9));
+        videoWrapper.style.height = `${fullPortraitHeight}px`;
       } else {
         // DI LAPTOP: Rasio standar 16:9
         const wrapperWidth = videoWrapper.clientWidth || (screenWidth > 992 ? screenWidth - 400 : screenWidth - 40);
-        videoWrapper.style.height = `${wrapperWidth * 0.5625}px`;
+        videoWrapper.style.height = `${Math.floor(wrapperWidth * 0.5625)}px`;
       }
     }
 
-    // Jalankan fungsi pengukur layar saat window di-resize
     window.addEventListener('resize', adjustPlayerSize);
 
-    // Event saat iframe selesai memuat isi video
     mainPlayer.addEventListener('load', () => {
       mainPlayer.classList.add('loaded');
       playerLoader.style.display = 'none';
@@ -533,7 +530,6 @@
     function playVideo(rawId, title) {
       const cleanId = getCleanId(rawId);
       
-      // Sembunyikan iframe dulu & tampilkan loader agar tidak ada jeda layar hitam kosong
       mainPlayer.classList.remove('loaded');
       playerLoader.style.display = 'flex';
 
@@ -541,10 +537,9 @@
       gridView.style.display = 'none';
       watchLayout.style.display = 'grid';
 
-      // UKUR UKURAN WRAPPER SEKETIKA DENGAN INSTAN
+      // UKUR LANGSUNG AGAR DIBUAT FULL KE BAWAH DI HP
       adjustPlayerSize();
 
-      // Setel URL video setelah layout siap
       mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview?autoplay=1`;
       activeTitle.textContent = title;
 

@@ -422,9 +422,9 @@
           </div>
         </div>
 
-        <!-- TAG VIDEO BAWAAN HP/WEB -->
+        <!-- PLAYER HTML5 WEBSITE -->
         <div class="video-wrapper">
-          <video id="mainPlayer" controls autoplay playsinline controlsList="nodownload">
+          <video id="mainPlayer" controls autoplay playsinline preload="metadata" controlsList="nodownload">
             <source id="videoSource" src="" type="video/mp4">
             Browser Anda tidak mendukung pemutar video.
           </video>
@@ -449,9 +449,9 @@
   </footer>
 
   <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 19 -->
-  <script src="videos.js?v=19"></script>
+  <script src="videos.js?v=20"></script>
 
-  <!-- LOGIKA MENGUBAH LINK DRIVE JADI MURNI VIDEO WEB -->
+  <!-- LOGIKA PEMUTAR GOOGLE DRIVE -->
   <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
@@ -487,27 +487,107 @@
       renderGrid();
     }
 
+    // ==========================================================
+    // PEMUTAR GOOGLE DRIVE - HTML5 PLAYER WEBSITE
+    // ==========================================================
+
+    let currentVideoId = "";
+    let currentVideoTitle = "";
+    let driveTry = 0;
+
+    function getDriveUrls(id) {
+      const cleanId = encodeURIComponent(id);
+
+      return [
+        // URL utama
+        `https://drive.usercontent.google.com/download?export=download&confirm=t&id=${cleanId}`,
+
+        // URL cadangan
+        `https://drive.google.com/uc?export=download&id=${cleanId}`
+      ];
+    }
+
+    function removeVideoError() {
+      const box = document.getElementById("videoError");
+      if (box) box.remove();
+    }
+
+    function showVideoError() {
+      removeVideoError();
+
+      const box = document.createElement("div");
+      box.id = "videoError";
+      box.style.cssText =
+        "margin-top:10px;padding:12px 14px;border-radius:8px;" +
+        "background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;" +
+        "font-size:13px;line-height:1.5;";
+
+      box.innerHTML =
+        "<b>Video tidak bisa diputar.</b><br>" +
+        "Pastikan file Google Drive sudah diatur " +
+        "<b>Siapa saja yang memiliki link → Viewer</b> " +
+        "dan file berupa MP4 yang bisa diputar browser.";
+
+      document.querySelector(".video-details").appendChild(box);
+    }
+
+    function loadDriveVideo() {
+      const urls = getDriveUrls(currentVideoId);
+
+      if (driveTry >= urls.length) {
+        showVideoError();
+        return;
+      }
+
+      const url = urls[driveTry];
+
+      // Bersihkan source lama sebelum memasang source baru.
+      mainPlayer.pause();
+      mainPlayer.removeAttribute("src");
+      videoSource.removeAttribute("src");
+
+      videoSource.src = url;
+      mainPlayer.src = url;
+
+      mainPlayer.load();
+
+      const promise = mainPlayer.play();
+      if (promise) promise.catch(() => {});
+    }
+
     function playVideo(rawId, title) {
       const cleanId = getCleanId(rawId);
-      
-      // MENGGABUNGKAN TEKNOLOGI STREAMING DIRECT DARI DRIVE UNTUK TAG HTML5 VIDEO
-      const directVideoUrl = `https://drive.google.com/uc?export=download&id=${cleanId}`;
-      
-      videoSource.src = directVideoUrl;
-      mainPlayer.src = directVideoUrl;
-      
-      mainPlayer.load();
-      mainPlayer.play().catch(() => {});
+
+      currentVideoId = cleanId;
+      currentVideoTitle = title;
+      driveTry = 0;
+
+      removeVideoError();
 
       activeTitle.textContent = title;
 
-      filterContainer.style.display = 'none';
-      gridView.style.display = 'none';
-      watchLayout.style.display = 'grid';
+      filterContainer.style.display = "none";
+      gridView.style.display = "none";
+      watchLayout.style.display = "grid";
+
+      loadDriveVideo();
 
       renderSidebar(cleanId);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
+
+    // Kalau URL utama gagal, otomatis mencoba URL Google Drive cadangan.
+    mainPlayer.addEventListener("error", function () {
+      if (!currentVideoId) return;
+
+      driveTry++;
+
+      if (driveTry < getDriveUrls(currentVideoId).length) {
+        loadDriveVideo();
+      } else {
+        showVideoError();
+      }
+    });
 
     function renderGrid() {
       gridView.innerHTML = '';

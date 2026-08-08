@@ -19,7 +19,7 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f8fafc; /* Latar Belakang Terang */
+      background-color: #f8fafc;
       color: #1e293b;
       min-height: 100vh;
       display: flex;
@@ -165,14 +165,14 @@
 
     /* 2. TAMPILAN PEMUTAR VIDEO (BARU MUNCUL PAS DIKLIK) */
     .watch-layout {
-      display: none; /* Sembunyi secara default */
+      display: none;
       grid-template-columns: 1fr;
       gap: 24px;
     }
 
     @media (min-width: 992px) {
       .watch-layout {
-        grid-template-columns: 1fr 380px; /* Video besar di Kiri, List Rekomendasi di Kanan */
+        grid-template-columns: 1fr 380px;
       }
     }
 
@@ -202,7 +202,7 @@
 
     .video-wrapper {
       position: relative;
-      padding-bottom: 56.25%; /* 16:9 */
+      padding-bottom: 56.25%;
       height: 0;
       background-color: #000;
       border-radius: 12px;
@@ -352,49 +352,59 @@
     &copy; 2026 MAYPAYKOLEKSIVIDEO — Google Drive Streaming
   </footer>
 
-  <script>
-    // MASUKKAN DAFTAR VIDEO GOOGLE DRIVE ANDA DI SINI
-    const videoList = [
-      {
-        id: "1_gaVfcl_8HPTnffG0P-yfqFl3XmZO6sv",
-        title: "Video Koleksi 1"
-      }
-      // Tambahkan video lain di sini jika ada
-    ];
+  <!-- 1. MEMANGGIL FILE EXTERNAL VIDEOS.JS -->
+  <script src="videos.js"></script>
 
+  <!-- 2. SCRIPT LOGIKA PROGRAM -->
+  <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
     const mainPlayer = document.getElementById('mainPlayer');
     const activeTitle = document.getElementById('activeTitle');
     const sidebarList = document.getElementById('sidebarList');
 
+    // Mengambil File ID dari Link Google Drive jika user memasukkan full URL
+    function getCleanId(idOrUrl) {
+      if (!idOrUrl) return "";
+      if (idOrUrl.length === 33 && !idOrUrl.includes('/')) return idOrUrl;
+      const match = idOrUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      return match ? match[1] : idOrUrl;
+    }
+
     // Tampilan Awal: Hanya List/Grid
     function showGridView() {
-      mainPlayer.src = ""; // Stop video
+      mainPlayer.src = "";
       watchLayout.style.display = 'none';
       gridView.style.display = 'grid';
     }
 
     // Tampilan Saat Video Diklik (Mode Nonton YouTube)
-    function playVideo(fileId, title) {
-      mainPlayer.src = `https://drive.google.com/file/d/${fileId}/preview`;
+    function playVideo(rawId, title) {
+      const cleanId = getCleanId(rawId);
+      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview`;
       activeTitle.textContent = title;
 
       gridView.style.display = 'none';
       watchLayout.style.display = 'grid';
 
-      renderSidebar(fileId);
+      renderSidebar(cleanId);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // Render Galeri Awal
     function renderGrid() {
       gridView.innerHTML = '';
+      if (typeof videoList === 'undefined' || videoList.length === 0) {
+        gridView.innerHTML = '<p>Belum ada video di videos.js</p>';
+        return;
+      }
+
       videoList.forEach(video => {
-        const thumbUrl = `https://drive.google.com/thumbnail?id=${video.id}&sz=w800`;
+        const cleanId = getCleanId(video.id);
+        const thumbUrl = `https://drive.google.com/thumbnail?id=${cleanId}&sz=w800`;
         const card = document.createElement('div');
         card.className = 'video-card';
-        card.onclick = () => playVideo(video.id, video.title);
+        card.onclick = () => playVideo(cleanId, video.title);
 
         card.innerHTML = `
           <div class="thumbnail-container">
@@ -418,12 +428,13 @@
     function renderSidebar(currentId) {
       sidebarList.innerHTML = '';
       videoList.forEach(video => {
-        if (video.id === currentId) return;
+        const cleanId = getCleanId(video.id);
+        if (cleanId === currentId) return;
 
-        const thumbUrl = `https://drive.google.com/thumbnail?id=${video.id}&sz=w400`;
+        const thumbUrl = `https://drive.google.com/thumbnail?id=${cleanId}&sz=w400`;
         const card = document.createElement('div');
         card.className = 'sidebar-card';
-        card.onclick = () => playVideo(video.id, video.title);
+        card.onclick = () => playVideo(cleanId, video.title);
 
         card.innerHTML = `
           <div class="sidebar-thumb">
@@ -438,7 +449,6 @@
       });
     }
 
-    // Jalankan awal
     document.addEventListener('DOMContentLoaded', renderGrid);
   </script>
 </body>

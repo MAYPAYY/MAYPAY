@@ -208,8 +208,14 @@
       flex-direction: column;
     }
 
-    .back-btn {
+    .player-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 12px;
+    }
+
+    .back-btn {
       background: none;
       border: none;
       color: #0284c7;
@@ -219,18 +225,30 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      width: fit-content;
     }
 
     .back-btn:hover {
       text-decoration: underline;
     }
 
-    /* WADAH PEMUTAR VIDEO (STANDAR 16:9 AGAR CONTROL SELALU DI BAWAH) */
+    /* LABEL MAYPAY RAPI DI LUAR FRAME VIDEO */
+    .maypay-badge {
+      background-color: #0284c7;
+      color: #ffffff;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* WADAH PEMUTAR VIDEO BERSIH TANPA TUMPUKAN ELEMENT */
     .video-wrapper {
       position: relative;
       width: 100%;
-      padding-bottom: 56.25%; /* 16:9 */
+      padding-bottom: 56.25%; /* Rasio standar 16:9 */
       height: 0;
       background-color: #000;
       border-radius: 12px;
@@ -245,28 +263,6 @@
       width: 100%;
       height: 100%;
       border: 0;
-    }
-
-    /* BLOCKER POP-OUT DRIVE - LAPTOP */
-    .drive-blocker-logo {
-      position: absolute;
-      top: 0;
-      right: 0;
-      min-width: 110px;
-      height: 42px;
-      padding: 6px 12px;
-      background-color: #0284c7;
-      color: #ffffff;
-      border-bottom-left-radius: 10px;
-      font-size: 12px;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      z-index: 10;
-      box-shadow: -2px 2px 8px rgba(0,0,0,0.2);
-      user-select: none;
     }
 
     .video-details {
@@ -354,9 +350,7 @@
       background-color: #ffffff;
     }
 
-    /* ===================================================
-       RESPONSIF HP (PRESISI TUTUP ATAS & CONTROL DI BAWAH)
-       =================================================== */
+    /* MEDIA QUERIES HP */
     @media (max-width: 600px) {
       .navbar {
         padding: 12px 16px;
@@ -373,23 +367,6 @@
       .grid-view {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 10px;
-      }
-
-      /* KUNCI WRAPPER DENGAN RASIO LANDSCAPE DI HP UNTUK MENCEGAH GARIS DURASI NAIK */
-      .video-wrapper {
-        padding-bottom: 56.25%; /* 16:9 */
-        height: 0;
-      }
-
-      /* PENUTUP MAYPAY HP: TURUN LEBIH DITUTUPKAN DENGAN PRESISI SIKU */
-      .drive-blocker-logo {
-        min-width: 130px;
-        height: 40px;
-        padding: 4px 10px;
-        font-size: 11px;
-        top: 0;
-        right: 0;
-        border-bottom-left-radius: 12px;
       }
 
       .sidebar-thumb {
@@ -425,17 +402,21 @@
     <div id="watchLayout" class="watch-layout">
       <!-- KIRI: PLAYER BESAR -->
       <div class="main-player-container">
-        <button class="back-btn" onclick="showGridView()">
-          <i class="fa-solid fa-arrow-left"></i> Kembali ke Galeri
-        </button>
-        <div class="video-wrapper">
-          <!-- LOGO BADGE PENUTUP -->
-          <div class="drive-blocker-logo">
+        
+        <!-- HEADER ATAS PLAYER (KEMBALI + BADGE MAYPAY) -->
+        <div class="player-header">
+          <button class="back-btn" onclick="showGridView()">
+            <i class="fa-solid fa-arrow-left"></i> Kembali ke Galeri
+          </button>
+          <div class="maypay-badge">
             <i class="fa-solid fa-play"></i> MAYPAY
           </div>
-          
+        </div>
+
+        <div class="video-wrapper">
           <iframe id="mainPlayer" src="" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
         </div>
+        
         <div class="video-details">
           <h1 id="activeTitle">Judul Video</h1>
         </div>
@@ -454,8 +435,8 @@
     &copy; 2026 MAYPAYKOLEKSIVIDEO — Google Drive Streaming
   </footer>
 
-  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 8 -->
-  <script src="videos.js?v=8"></script>
+  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 9 -->
+  <script src="videos.js?v=9"></script>
 
   <!-- LOGIKA APP -->
   <script>

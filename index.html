@@ -68,7 +68,7 @@
       flex-grow: 1;
     }
 
-    /* 1. TAMPILAN AWAL (HANYA LIST/GRID VIDEO) */
+    /* 1. TAMPILAN AWAL (GRID VIDEO) */
     .grid-view {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -163,7 +163,7 @@
       gap: 6px;
     }
 
-    /* 2. TAMPILAN PEMUTAR VIDEO (BARU MUNCUL PAS DIKLIK) */
+    /* 2. TAMPILAN PEMUTAR VIDEO */
     .watch-layout {
       display: none;
       grid-template-columns: 1fr;
@@ -176,7 +176,6 @@
       }
     }
 
-    /* KIRI: VIDEO BESAR */
     .main-player-container {
       display: flex;
       flex-direction: column;
@@ -219,16 +218,25 @@
       border: 0;
     }
 
-    /* BLOKER UNTUK MENUTUPI IKON DRIVE DI POJOK KANAN ATAS */
-    .drive-blocker {
+    /* LOGO PENUTUP IKON DRIVE (SOLID BADGE) */
+    .drive-blocker-logo {
       position: absolute;
-      top: 0;
-      right: 0;
-      width: 70px;
-      height: 70px;
-      background: transparent;
+      top: 8px;
+      right: 8px;
+      background-color: #0284c7; /* Warna Biru Solid */
+      color: #ffffff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       z-index: 10;
-      cursor: default;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      user-select: none;
+      pointer-events: auto;
     }
 
     .video-details {
@@ -241,7 +249,7 @@
       color: #0f172a;
     }
 
-    /* KANAN: LIST VIDEO YOUTUBE STYLE */
+    /* KANAN: LIST VIDEO SIDEBAR */
     .sidebar-list {
       display: flex;
       flex-direction: column;
@@ -330,11 +338,9 @@
   <div class="container">
 
     <!-- 1. HANYA LIST VIDEO DI AWAL -->
-    <div id="gridView" class="grid-view">
-      <!-- Dimuat via JavaScript -->
-    </div>
+    <div id="gridView" class="grid-view"></div>
 
-    <!-- 2. PEMUTAR VIDEO (BARU MUNCUL PAS DIKLIK) -->
+    <!-- 2. PEMUTAR VIDEO -->
     <div id="watchLayout" class="watch-layout">
       <!-- KIRI: PLAYER BESAR -->
       <div class="main-player-container">
@@ -342,8 +348,10 @@
           <i class="fa-solid fa-arrow-left"></i> Kembali ke Galeri
         </button>
         <div class="video-wrapper">
-          <!-- Pelindung Ikon Google Drive -->
-          <div class="drive-blocker"></div>
+          <!-- LOGO BADGE PENUTUP IKON DRIVE -->
+          <div class="drive-blocker-logo">
+            <i class="fa-solid fa-play"></i> MAYPAY
+          </div>
           
           <iframe id="mainPlayer" src="" allow="autoplay" allowfullscreen></iframe>
         </div>
@@ -352,12 +360,10 @@
         </div>
       </div>
 
-      <!-- KANAN: LIST LAINNYA -->
+      <!-- KANAN: LIST REKOMENDASI -->
       <div>
         <div class="sidebar-title">Koleksi Lainnya</div>
-        <div class="sidebar-list" id="sidebarList">
-          <!-- Dimuat via JavaScript -->
-        </div>
+        <div class="sidebar-list" id="sidebarList"></div>
       </div>
     </div>
 
@@ -367,10 +373,10 @@
     &copy; 2026 MAYPAYKOLEKSIVIDEO — Google Drive Streaming
   </footer>
 
-  <!-- 1. MEMANGGIL FILE EXTERNAL VIDEOS.JS -->
+  <!-- FILE VIDEOS.JS -->
   <script src="videos.js"></script>
 
-  <!-- 2. SCRIPT LOGIKA PROGRAM -->
+  <!-- LOGIKA APP -->
   <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
@@ -378,7 +384,6 @@
     const activeTitle = document.getElementById('activeTitle');
     const sidebarList = document.getElementById('sidebarList');
 
-    // Mengambil File ID dari Link Google Drive jika user memasukkan full URL
     function getCleanId(idOrUrl) {
       if (!idOrUrl) return "";
       if (idOrUrl.length === 33 && !idOrUrl.includes('/')) return idOrUrl;
@@ -386,14 +391,12 @@
       return match ? match[1] : idOrUrl;
     }
 
-    // Tampilan Awal: Hanya List/Grid
     function showGridView() {
       mainPlayer.src = "";
       watchLayout.style.display = 'none';
       gridView.style.display = 'grid';
     }
 
-    // Tampilan Saat Video Diklik (Mode Nonton YouTube)
     function playVideo(rawId, title) {
       const cleanId = getCleanId(rawId);
       mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview`;
@@ -406,7 +409,6 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Render Galeri Awal
     function renderGrid() {
       gridView.innerHTML = '';
       if (typeof videoList === 'undefined' || videoList.length === 0) {
@@ -439,7 +441,6 @@
       });
     }
 
-    // Render List Samping (Kanan)
     function renderSidebar(currentId) {
       sidebarList.innerHTML = '';
       videoList.forEach(video => {

@@ -248,21 +248,48 @@
       gap: 6px;
     }
 
-    /* BINGKAI FRAME PEMUTAR DENGAN UKURAN DITENTUKAN JAVASCRIPT */
+    /* BINGKAI FRAME PEMUTAR DENGAN ANIMASI LOADING SILENT */
     .video-wrapper {
       position: relative;
       width: 100%;
-      background-color: #000;
+      background-color: #0f172a;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      transition: height 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .player-loader {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #38bdf8;
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 1;
+    }
+
+    .player-loader i {
+      font-size: 28px;
     }
 
     .video-wrapper iframe {
+      position: relative;
+      z-index: 2;
       width: 100%;
       height: 100%;
       border: 0;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .video-wrapper iframe.loaded {
+      opacity: 1;
     }
 
     .video-details {
@@ -414,6 +441,10 @@
         </div>
 
         <div class="video-wrapper" id="videoWrapper">
+          <div class="player-loader" id="playerLoader">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+            <span>Memuat Video...</span>
+          </div>
           <iframe id="mainPlayer" src="" allow="autoplay; encrypted-media; picture-in-picture; fullscreen"></iframe>
         </div>
         
@@ -435,10 +466,10 @@
     &copy; 2026 MAYPAYKOLEKSIVIDEO — Google Drive Streaming
   </footer>
 
-  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 12 -->
-  <script src="videos.js?v=12"></script>
+  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 13 -->
+  <script src="videos.js?v=13"></script>
 
-  <!-- LOGIKA APP DENGAN PERHITUNGAN UKURAN DINAMIS & AUTOPLAY -->
+  <!-- LOGIKA APP DENGAN INSTANT SIZING & LOADING ANIMATION -->
   <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
@@ -447,20 +478,21 @@
     const sidebarList = document.getElementById('sidebarList');
     const filterContainer = document.getElementById('filterContainer');
     const videoWrapper = document.getElementById('videoWrapper');
+    const playerLoader = document.getElementById('playerLoader');
 
     let currentFilter = 'ALL';
 
-    // FUNGSI MENGHITUNG UKURAN LAYAR DINAMIS
+    // FUNGSI MENGHITUNG UKURAN LAYAR INSTAN
     function adjustPlayerSize() {
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
 
       if (screenWidth < 600) {
-        // DI HP: Gunakan tinggi dinamis yang pas dengan video portrait agar kontrol berada di bawah
+        // DI HP: Tinggi dinamis langsung diukur sebelum video tampil
         const dynamicHeight = Math.min(screenWidth * 0.75, screenHeight * 0.45);
         videoWrapper.style.height = `${dynamicHeight}px`;
       } else {
-        // DI LAPTOP: Gunakan rasio standar 16:9
+        // DI LAPTOP: Rasio standar 16:9
         const wrapperWidth = videoWrapper.clientWidth || (screenWidth > 992 ? screenWidth - 400 : screenWidth - 40);
         videoWrapper.style.height = `${wrapperWidth * 0.5625}px`;
       }
@@ -468,6 +500,12 @@
 
     // Jalankan fungsi pengukur layar saat window di-resize
     window.addEventListener('resize', adjustPlayerSize);
+
+    // Event saat iframe selesai memuat isi video
+    mainPlayer.addEventListener('load', () => {
+      mainPlayer.classList.add('loaded');
+      playerLoader.style.display = 'none';
+    });
 
     function getCleanId(idOrUrl) {
       if (!idOrUrl) return "";
@@ -478,6 +516,7 @@
 
     function showGridView() {
       mainPlayer.src = "";
+      mainPlayer.classList.remove('loaded');
       watchLayout.style.display = 'none';
       filterContainer.style.display = 'flex';
       gridView.style.display = 'grid';
@@ -493,16 +532,21 @@
 
     function playVideo(rawId, title) {
       const cleanId = getCleanId(rawId);
-      // MENAMBAHKAN PARAMETER autoplay=1 AGAR BEGITU DIKLIK VIDEO LANGSUNG DIPUTAR
-      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview?autoplay=1`;
-      activeTitle.textContent = title;
+      
+      // Sembunyikan iframe dulu & tampilkan loader agar tidak ada jeda layar hitam kosong
+      mainPlayer.classList.remove('loaded');
+      playerLoader.style.display = 'flex';
 
       filterContainer.style.display = 'none';
       gridView.style.display = 'none';
       watchLayout.style.display = 'grid';
 
-      // Hitung ukuran pemutar saat video diputar
-      setTimeout(adjustPlayerSize, 50);
+      // UKUR UKURAN WRAPPER SEKETIKA DENGAN INSTAN
+      adjustPlayerSize();
+
+      // Setel URL video setelah layout siap
+      mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview?autoplay=1`;
+      activeTitle.textContent = title;
 
       renderSidebar(cleanId);
       window.scrollTo({ top: 0, behavior: 'smooth' });

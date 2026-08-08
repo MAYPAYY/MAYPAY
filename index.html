@@ -2,10 +2,10 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>MAYPAYKOLEKSIVIDEO</title>
   
-  <!-- FAVICON EMOJI -->
+  <!-- FAVICON EMOJI UNTUK MENCEGAH ERROR 404 -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>▶️</text></svg>">
 
   <!-- Google Fonts & Font Awesome Icons -->
@@ -247,7 +247,7 @@
       gap: 6px;
     }
 
-    /* BINGKAI PEMUTAR LANSKAP STABIL (16:9) */
+    /* BINGKAI PEMUTAR RESPONSIF UNIVERSAL UNTUK SEMUA HP */
     .video-wrapper {
       position: relative;
       width: 100%;
@@ -259,6 +259,9 @@
     }
 
     .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       border: 0;
@@ -349,7 +352,7 @@
       background-color: #ffffff;
     }
 
-    /* MEDIA QUERIES HP */
+    /* KHUSUS PERANGKAT HP / SELULER */
     @media (max-width: 600px) {
       .navbar {
         padding: 12px 16px;
@@ -364,7 +367,7 @@
       }
 
       .grid-view {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         gap: 10px;
       }
 
@@ -373,10 +376,11 @@
         height: 50px;
       }
 
-      /* TAMPILAN BINGKAI HP: LANSKAP (16:9) AGAR KONTROL DRIVE RAPI DI BAWAH */
+      /* MEMASIKAN MENGGUNAKAN RASIO LANSKAP STABIL DI SELURUH TIPE HP */
       .video-wrapper {
-        aspect-ratio: 16 / 9;
         width: 100%;
+        aspect-ratio: 16 / 9;
+        max-height: 65vh;
       }
     }
   </style>
@@ -400,15 +404,15 @@
       <button class="filter-btn" onclick="setFilter('C', this)">Kategori C</button>
     </div>
 
-    <!-- 1. HANYA LIST VIDEO DI AWAL -->
+    <!-- 1. TAMPILAN AWAL LIST VIDEO -->
     <div id="gridView" class="grid-view"></div>
 
-    <!-- 2. PEMUTAR VIDEO STREAMING DRIVE -->
+    <!-- 2. PEMUTAR VIDEO STREAMING -->
     <div id="watchLayout" class="watch-layout">
       <!-- KIRI: PLAYER BESAR -->
       <div class="main-player-container">
         
-        <!-- HEADER ATAS PLAYER (TETAP ADA DI ATAS VIDEO) -->
+        <!-- HEADER ATAS PLAYER -->
         <div class="player-header">
           <button class="back-btn" onclick="showGridView()">
             <i class="fa-solid fa-arrow-left"></i> Kembali ke Galeri
@@ -418,7 +422,7 @@
           </div>
         </div>
 
-        <!-- BINGKAI VIDEO LANSKAP -->
+        <!-- BINGKAI PEMUTAR VIDEO RESPONSIF -->
         <div class="video-wrapper">
           <iframe
             id="mainPlayer"
@@ -448,9 +452,9 @@
   </footer>
 
   <!-- FILE VIDEOS.JS -->
-  <script src="videos.js?v=23"></script>
+  <script src="videos.js?v=24"></script>
 
-  <!-- LOGIKA APP GOOGLE DRIVE STREAMING -->
+  <!-- LOGIKA PEMUTAR STREAMING -->
   <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
@@ -497,7 +501,7 @@
       gridView.style.display = 'none';
       watchLayout.style.display = 'grid';
 
-      // STREAMING RESMI GOOGLE DRIVE PREVIEW
+      // PANGGIL PREVIEW DRIVER STREAMING RESMI
       mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview`;
 
       renderSidebar(cleanId);

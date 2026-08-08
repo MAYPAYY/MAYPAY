@@ -226,6 +226,7 @@
       text-decoration: underline;
     }
 
+    /* WADAH PEMUTAR VIDEO DESKTOP (16:9) */
     .video-wrapper {
       position: relative;
       padding-bottom: 56.25%;
@@ -245,17 +246,17 @@
       border: 0;
     }
 
-    /* BLOCKER DRIVE - UKURAN DESKTOP */
+    /* BLOCKER DRIVE - LAPTOP */
     .drive-blocker-logo {
       position: absolute;
       top: 0;
       right: 0;
-      min-width: 130px;
-      height: 55px;
-      padding: 8px 16px;
+      min-width: 120px;
+      height: 48px;
+      padding: 6px 14px;
       background-color: #0284c7;
       color: #ffffff;
-      border-bottom-left-radius: 14px;
+      border-bottom-left-radius: 12px;
       font-size: 13px;
       font-weight: 800;
       display: flex;
@@ -267,7 +268,17 @@
       user-select: none;
     }
 
-    /* KANAN: LIST REKOMENDASI SIDEBAR */
+    .video-details {
+      margin-top: 16px;
+    }
+
+    .video-details h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    /* SIDEBAR REKOMENDASI */
     .sidebar-list {
       display: flex;
       flex-direction: column;
@@ -343,7 +354,7 @@
     }
 
     /* ===================================================
-       MEDIA QUERIES KHUSUS HP (TAMPILAN RESPONSIF MOBILE)
+       RESPONSIF KHUSUS HP (TAMPILAN PORTRAIT & KONTROL VIDEO)
        =================================================== */
     @media (max-width: 600px) {
       .navbar {
@@ -355,34 +366,31 @@
       }
 
       .container {
-        padding: 14px 10px;
+        padding: 12px 8px;
       }
 
       .grid-view {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
       }
 
-      .card-body {
-        padding: 10px;
+      /* MEMPERTINGGI PEMUTAR DI HP AGAR VIDEO VERTIKAL/PORTRAIT TAMPIL SEMPURNA */
+      .video-wrapper {
+        padding-bottom: 125%; /* Memberikan ruang ekstra tinggi untuk video vertikal */
       }
 
-      .card-title {
-        font-size: 13px;
-      }
-
-      /* PENUTUP DRIVE KHUSUS HP (PRESISI, TIDAK MENGGANGGU CONTROLLER) */
+      /* PENUTUP DRIVE DI HP PERSISI DICOBA TIDAK MENUTUPI KONTROL */
       .drive-blocker-logo {
-        min-width: 95px;
-        height: 42px;
-        padding: 4px 10px;
+        min-width: 85px;
+        height: 36px;
+        padding: 4px 8px;
         font-size: 11px;
         border-bottom-left-radius: 10px;
       }
 
       .sidebar-thumb {
-        width: 95px;
-        height: 54px;
+        width: 90px;
+        height: 50px;
       }
     }
   </style>
@@ -443,7 +451,7 @@
   </footer>
 
   <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION -->
-  <script src="videos.js?v=2"></script>
+  <script src="videos.js?v=3"></script>
 
   <!-- LOGIKA APP -->
   <script>

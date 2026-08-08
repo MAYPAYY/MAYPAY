@@ -260,14 +260,15 @@
       justify-content: center;
     }
 
-    /* TAG VIDEO NATIVE WEB HP */
-    .video-wrapper video {
+    /* PLAYER GOOGLE DRIVE DI DALAM TAMPILAN WEBSITE */
+    .video-wrapper iframe {
       width: 100%;
-      max-height: 75vh;
+      height: min(75vh, 720px);
+      min-height: 320px;
+      border: 0;
       border-radius: 12px;
-      outline: none;
       background: #000;
-      object-fit: contain;
+      display: block;
     }
 
     .video-details {
@@ -379,8 +380,9 @@
         height: 50px;
       }
 
-      .video-wrapper video {
-        max-height: 70vh;
+      .video-wrapper iframe {
+        height: 70vh;
+        min-height: 240px;
       }
     }
   </style>
@@ -422,12 +424,16 @@
           </div>
         </div>
 
-        <!-- PLAYER HTML5 WEBSITE -->
+        <!-- PLAYER GOOGLE DRIVE DI DALAM WEBSITE -->
         <div class="video-wrapper">
-          <video id="mainPlayer" controls autoplay playsinline preload="metadata" controlsList="nodownload">
-            <source id="videoSource" src="" type="video/mp4">
-            Browser Anda tidak mendukung pemutar video.
-          </video>
+          <iframe
+            id="mainPlayer"
+            src=""
+            title="MAYPAY Video Player"
+            allow="autoplay; fullscreen"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
         
         <div class="video-details">
@@ -448,7 +454,7 @@
     &copy; 2026 MAYPAYKOLEKSIVIDEO — Web HTML5 Player
   </footer>
 
-  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 19 -->
+  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 20 -->
   <script src="videos.js?v=20"></script>
 
   <!-- LOGIKA PEMUTAR GOOGLE DRIVE -->
@@ -456,7 +462,6 @@
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
     const mainPlayer = document.getElementById('mainPlayer');
-    const videoSource = document.getElementById('videoSource');
     const activeTitle = document.getElementById('activeTitle');
     const sidebarList = document.getElementById('sidebarList');
     const filterContainer = document.getElementById('filterContainer');
@@ -471,9 +476,7 @@
     }
 
     function showGridView() {
-      mainPlayer.pause();
       mainPlayer.src = "";
-      videoSource.src = "";
       watchLayout.style.display = 'none';
       filterContainer.style.display = 'flex';
       gridView.style.display = 'grid';
@@ -488,106 +491,31 @@
     }
 
     // ==========================================================
-    // PEMUTAR GOOGLE DRIVE - HTML5 PLAYER WEBSITE
+    // PEMUTAR GOOGLE DRIVE - TANPA SERVER / APPS SCRIPT
+    // Menggunakan Google Drive Preview di dalam iframe.
+    // Video tetap berada di Google Drive.
     // ==========================================================
-
-    let currentVideoId = "";
-    let currentVideoTitle = "";
-    let driveTry = 0;
-
-    function getDriveUrls(id) {
-      const cleanId = encodeURIComponent(id);
-
-      return [
-        // URL utama
-        `https://drive.usercontent.google.com/download?export=download&confirm=t&id=${cleanId}`,
-
-        // URL cadangan
-        `https://drive.google.com/uc?export=download&id=${cleanId}`
-      ];
-    }
-
-    function removeVideoError() {
-      const box = document.getElementById("videoError");
-      if (box) box.remove();
-    }
-
-    function showVideoError() {
-      removeVideoError();
-
-      const box = document.createElement("div");
-      box.id = "videoError";
-      box.style.cssText =
-        "margin-top:10px;padding:12px 14px;border-radius:8px;" +
-        "background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;" +
-        "font-size:13px;line-height:1.5;";
-
-      box.innerHTML =
-        "<b>Video tidak bisa diputar.</b><br>" +
-        "Pastikan file Google Drive sudah diatur " +
-        "<b>Siapa saja yang memiliki link → Viewer</b> " +
-        "dan file berupa MP4 yang bisa diputar browser.";
-
-      document.querySelector(".video-details").appendChild(box);
-    }
-
-    function loadDriveVideo() {
-      const urls = getDriveUrls(currentVideoId);
-
-      if (driveTry >= urls.length) {
-        showVideoError();
-        return;
-      }
-
-      const url = urls[driveTry];
-
-      // Bersihkan source lama sebelum memasang source baru.
-      mainPlayer.pause();
-      mainPlayer.removeAttribute("src");
-      videoSource.removeAttribute("src");
-
-      videoSource.src = url;
-      mainPlayer.src = url;
-
-      mainPlayer.load();
-
-      const promise = mainPlayer.play();
-      if (promise) promise.catch(() => {});
-    }
 
     function playVideo(rawId, title) {
       const cleanId = getCleanId(rawId);
 
-      currentVideoId = cleanId;
-      currentVideoTitle = title;
-      driveTry = 0;
-
-      removeVideoError();
-
       activeTitle.textContent = title;
 
-      filterContainer.style.display = "none";
-      gridView.style.display = "none";
-      watchLayout.style.display = "grid";
+      filterContainer.style.display = 'none';
+      gridView.style.display = 'none';
+      watchLayout.style.display = 'grid';
 
-      loadDriveVideo();
+      // Google Drive Preview.
+      // Player tetap tampil di halaman website, tanpa membuka halaman
+      // Google Drive secara terpisah.
+      mainPlayer.src =
+        'https://drive.google.com/file/d/' +
+        encodeURIComponent(cleanId) +
+        '/preview';
 
       renderSidebar(cleanId);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
-    // Kalau URL utama gagal, otomatis mencoba URL Google Drive cadangan.
-    mainPlayer.addEventListener("error", function () {
-      if (!currentVideoId) return;
-
-      driveTry++;
-
-      if (driveTry < getDriveUrls(currentVideoId).length) {
-        loadDriveVideo();
-      } else {
-        showVideoError();
-      }
-    });
 
     function renderGrid() {
       gridView.innerHTML = '';

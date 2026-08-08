@@ -29,7 +29,7 @@
     /* NAVBAR BIRU MUDA */
     .navbar {
       background-color: #bae6fd;
-      padding: 14px 28px;
+      padding: 14px 20px;
       display: flex;
       align-items: center;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -47,12 +47,12 @@
     }
 
     .navbar-brand i {
-      font-size: 26px;
+      font-size: 24px;
       color: #0284c7;
     }
 
     .navbar-title {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 800;
       color: #0369a1;
       text-transform: uppercase;
@@ -64,26 +64,26 @@
       max-width: 1400px;
       width: 100%;
       margin: 0 auto;
-      padding: 24px 20px;
+      padding: 16px 14px;
       flex-grow: 1;
     }
 
-    /* KATEGORI / FILTER BUTTONS */
+    /* TOMBOL FILTER KATEGORI */
     .filter-container {
       display: flex;
-      gap: 10px;
-      margin-bottom: 24px;
+      gap: 8px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
     }
 
     .filter-btn {
-      padding: 8px 18px;
+      padding: 8px 16px;
       background-color: #ffffff;
       border: 1px solid #bae6fd;
       color: #0369a1;
       border-radius: 20px;
       font-weight: 600;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -95,11 +95,11 @@
       box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
     }
 
-    /* 1. TAMPILAN AWAL (GRID VIDEO) */
+    /* 1. TAMPILAN AWAL (GRID VIDEO RESPONSIF) */
     .grid-view {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
     }
 
     .video-card {
@@ -155,19 +155,19 @@
     }
 
     .play-btn-icon {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       background-color: #0284c7;
       color: #fff;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 16px;
     }
 
     .card-body {
-      padding: 14px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -175,11 +175,11 @@
     }
 
     .card-title {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       color: #0f172a;
       line-height: 1.4;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .card-meta {
@@ -194,12 +194,12 @@
     .watch-layout {
       display: none;
       grid-template-columns: 1fr;
-      gap: 24px;
+      gap: 20px;
     }
 
     @media (min-width: 992px) {
       .watch-layout {
-        grid-template-columns: 1fr 380px;
+        grid-template-columns: 1fr 360px;
       }
     }
 
@@ -245,49 +245,37 @@
       border: 0;
     }
 
-    /* LOGO BADGE UKURAN BESAR UNTUK MENUTUPI IKON DRIVE */
+    /* BLOCKER DRIVE - UKURAN DESKTOP */
     .drive-blocker-logo {
       position: absolute;
       top: 0;
       right: 0;
-      min-width: 140px;
-      min-height: 65px;
-      padding: 12px 20px;
+      min-width: 130px;
+      height: 55px;
+      padding: 8px 16px;
       background-color: #0284c7;
       color: #ffffff;
-      border-bottom-left-radius: 16px;
-      font-size: 15px;
+      border-bottom-left-radius: 14px;
+      font-size: 13px;
       font-weight: 800;
-      letter-spacing: 0.5px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       z-index: 10;
-      box-shadow: -2px 2px 10px rgba(0,0,0,0.3);
+      box-shadow: -2px 2px 8px rgba(0,0,0,0.2);
       user-select: none;
-      pointer-events: auto;
-    }
-
-    .video-details {
-      margin-top: 16px;
-    }
-
-    .video-details h1 {
-      font-size: 20px;
-      font-weight: 700;
-      color: #0f172a;
     }
 
     /* KANAN: LIST REKOMENDASI SIDEBAR */
     .sidebar-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .sidebar-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: #0369a1;
       margin-bottom: 6px;
@@ -295,7 +283,7 @@
 
     .sidebar-card {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       background-color: #ffffff;
       border-radius: 8px;
       padding: 8px;
@@ -310,8 +298,8 @@
     }
 
     .sidebar-thumb {
-      width: 120px;
-      height: 68px;
+      width: 110px;
+      height: 62px;
       border-radius: 6px;
       overflow: hidden;
       position: relative;
@@ -346,12 +334,56 @@
 
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 16px;
       color: #94a3b8;
-      font-size: 13px;
+      font-size: 12px;
       border-top: 1px solid #e2e8f0;
       margin-top: auto;
       background-color: #ffffff;
+    }
+
+    /* ===================================================
+       MEDIA QUERIES KHUSUS HP (TAMPILAN RESPONSIF MOBILE)
+       =================================================== */
+    @media (max-width: 600px) {
+      .navbar {
+        padding: 12px 16px;
+      }
+
+      .navbar-title {
+        font-size: 16px;
+      }
+
+      .container {
+        padding: 14px 10px;
+      }
+
+      .grid-view {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+      }
+
+      .card-body {
+        padding: 10px;
+      }
+
+      .card-title {
+        font-size: 13px;
+      }
+
+      /* PENUTUP DRIVE KHUSUS HP (PRESISI, TIDAK MENGGANGGU CONTROLLER) */
+      .drive-blocker-logo {
+        min-width: 95px;
+        height: 42px;
+        padding: 4px 10px;
+        font-size: 11px;
+        border-bottom-left-radius: 10px;
+      }
+
+      .sidebar-thumb {
+        width: 95px;
+        height: 54px;
+      }
     }
   </style>
 </head>
@@ -385,7 +417,7 @@
           <i class="fa-solid fa-arrow-left"></i> Kembali ke Galeri
         </button>
         <div class="video-wrapper">
-          <!-- LOGO BADGE PENUTUP UKURAN BESAR -->
+          <!-- LOGO BADGE PENUTUP RESPONSIF -->
           <div class="drive-blocker-logo">
             <i class="fa-solid fa-play"></i> MAYPAY
           </div>
@@ -397,7 +429,7 @@
         </div>
       </div>
 
-      <!-- KANAN: LIST LAINNYA -->
+      <!-- KANAN: LIST REKOMENDASI SIDEBAR -->
       <div>
         <div class="sidebar-title">Koleksi Lainnya</div>
         <div class="sidebar-list" id="sidebarList"></div>
@@ -410,7 +442,7 @@
     &copy; 2026 MAYPAYKOLEKSIVIDEO — Google Drive Streaming
   </footer>
 
-  <!-- FILE VIDEOS.JS -->
+  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION -->
   <script src="videos.js?v=2"></script>
 
   <!-- LOGIKA APP -->
@@ -474,7 +506,7 @@
       });
 
       if (filteredList.length === 0) {
-        gridView.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Tidak ada video dengan awalan judul ' + currentFilter + '</p>';
+        gridView.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 40px;">Tidak ada video dengan awalan ' + currentFilter + '</p>';
         return;
       }
 

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MAYPAYKOLEKSIVIDEO</title>
   
-  <!-- FAVICON EMOJI UNTUK MENCEGAH ERROR 404 CONSOLE -->
+  <!-- FAVICON EMOJI -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>▶️</text></svg>">
 
   <!-- Google Fonts & Font Awesome Icons -->
@@ -235,7 +235,7 @@
       text-decoration: underline;
     }
 
-    /* LABEL MAYPAY RAPI DI LUAR FRAME VIDEO */
+    /* BADGE MAYPAY */
     .maypay-badge {
       background-color: #0284c7;
       color: #ffffff;
@@ -248,7 +248,7 @@
       gap: 6px;
     }
 
-    /* BINGKAI FRAME PEMUTAR */
+    /* BINGKAI FRAME PEMUTAR PORTRAIT FULL KE BAWAH */
     .video-wrapper {
       position: relative;
       width: 100%;
@@ -278,6 +278,7 @@
       font-size: 28px;
     }
 
+    /* IFRAME POSISI PRESISI SUPAYA KONTROL DRIVE TURUN KE BAWAH */
     .video-wrapper iframe {
       position: relative;
       z-index: 2;
@@ -400,6 +401,12 @@
         width: 90px;
         height: 50px;
       }
+
+      /* TUNGGAL & MENURUNKAN KONTROL MEDIA LEBIH RENDAH DI HP */
+      .video-wrapper iframe {
+        margin-top: 5%;
+        height: 95%;
+      }
     }
   </style>
 </head>
@@ -466,10 +473,10 @@
     &copy; 2026 MAYPAYKOLEKSIVIDEO — Google Drive Streaming
   </footer>
 
-  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 15 -->
-  <script src="videos.js?v=15"></script>
+  <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION 16 -->
+  <script src="videos.js?v=16"></script>
 
-  <!-- LOGIKA APP: MEMASIKAN TAMPILAN PEMUTAR TUNGGAL RAPI DI BAWAH -->
+  <!-- LOGIKA APP: FRAME FULL KE BAWAH PORTRAIT 9:16 KONTROL TURUN -->
   <script>
     const gridView = document.getElementById('gridView');
     const watchLayout = document.getElementById('watchLayout');
@@ -482,14 +489,14 @@
 
     let currentFilter = 'ALL';
 
-    // FUNGSI MENGHITUNG UKURAN FRAME PAS AGAR KONTROL DRIVE BERADA DI BAWAH & TUNGGAL
+    // MEMBUAT FRAME DI HP TINGGI FULL KE BAWAH (PORTRAIT 9:16)
     function adjustPlayerSize() {
       const screenWidth = window.innerWidth;
 
       if (screenWidth < 600) {
-        // DI HP: Gunakan rasio 4:3 / max 60vh agar Google Drive TIDAK memecah tombol ke tengah
-        const idealHeight = Math.min(Math.floor(screenWidth * 0.75), Math.floor(window.innerHeight * 0.55));
-        videoWrapper.style.height = `${idealHeight}px`;
+        // FRAME DI-SET FULL TINGGI PORTRAIT
+        const fullPortraitHeight = Math.floor(screenWidth * (16 / 9));
+        videoWrapper.style.height = `${fullPortraitHeight}px`;
       } else {
         // DI LAPTOP: Rasio standar 16:9
         const wrapperWidth = videoWrapper.clientWidth || (screenWidth > 992 ? screenWidth - 400 : screenWidth - 40);
@@ -537,7 +544,7 @@
       gridView.style.display = 'none';
       watchLayout.style.display = 'grid';
 
-      // UKUR LANGSUNG AGAR PRESISI
+      // UKUR FRAME PORTRAIT FULL
       adjustPlayerSize();
 
       mainPlayer.src = `https://drive.google.com/file/d/${cleanId}/preview?autoplay=1`;

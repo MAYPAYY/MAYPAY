@@ -226,27 +226,27 @@
       text-decoration: underline;
     }
 
-    /* WADAH PEMUTAR VIDEO (RASIO CONSISTENT 16:9) */
+    /* WADAH PEMUTAR VIDEO (DI-SETTING AGAR VIDEO PORTRAIT TIDAK TERPOTONG) */
     .video-wrapper {
       position: relative;
-      padding-bottom: 56.25%; /* Standard 16:9 ratio mencegah kontrol ganda/dobel */
-      height: 0;
+      width: 100%;
+      aspect-ratio: 16 / 9;
       background-color: #000;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
       border: 0;
     }
 
-    /* BLOCKER POP-OUT DRIVE (TIDAK MENGGANGGU KONTROL VIDEO) */
+    /* BLOCKER POP-OUT DRIVE */
     .drive-blocker-logo {
       position: absolute;
       top: 0;
@@ -372,8 +372,10 @@
         gap: 10px;
       }
 
+      /* AGAR DI HP PEMUTAR LEBIH TINGGI UNTUK VIDEO PORTRAIT TAP KONTROL TETAP PRESISI */
       .video-wrapper {
-        padding-bottom: 56.25%; /* Tetap 16:9 agar kontrol Google Drive tunggal & berada di bawah */
+        aspect-ratio: 4 / 3;
+        max-height: 70vh;
       }
 
       .drive-blocker-logo {
@@ -447,7 +449,7 @@
   </footer>
 
   <!-- FILE VIDEOS.JS DENGAN CACHE BUSTING VERSION -->
-  <script src="videos.js?v=6"></script>
+  <script src="videos.js?v=7"></script>
 
   <!-- LOGIKA APP -->
   <script>
